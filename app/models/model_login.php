@@ -33,12 +33,15 @@ class Model_Login extends Model
                     $_SESSION['login'] = $records->login;
                     $_SESSION['id'] = $records->id;
                     echo 'Вы успешно вошли на сайт!<br>';
+                    echo "Перейдите на <a href='main'>Главную страницу</a>";
+                    exit();
                 }
             } else {
                 echo $errors[0];
             }
 
         }
+        return true;
 
     }
 }

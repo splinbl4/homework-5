@@ -1,10 +1,10 @@
 <?php
+session_start();
 
 class Model_Cabinet extends Model
 {
     public function get_data()
     {
-        session_start();
         $id = $_SESSION['id'];
         $sql = "SELECT * FROM user WHERE id = '$id'";
         $result = self::$connection->query($sql);
@@ -14,9 +14,9 @@ class Model_Cabinet extends Model
     public function get_photo()
     {
         $id = $_SESSION['id'];
-        $sql = "SELECT * FROM photos WHERE user_id = '$id'";
+        $sql = "SELECT filename FROM photos WHERE user_id = '$id'";
         $result = self::$connection->query($sql);
-        while ($record = mysqli_fetch_object($result)) {
+        while ($record = mysqli_fetch_assoc($result)) {
             $arr[] = $record;
         }
         return $arr;

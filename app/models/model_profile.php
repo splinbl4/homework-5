@@ -2,6 +2,18 @@
 session_start();
 class Model_Profile extends Model
 {
+    public function get_data()
+    {
+        session_start();
+        if (isset($_SESSION['id'])) {
+            $arr = [ 'name' => $_POST['name'],
+            'age' => $_POST['age'],
+            'description' => $_POST['description']
+            ];
+        }
+       return $arr;
+    }
+
     public function add_data()
     {
         if (isset($_POST['submit'])) {
@@ -24,20 +36,17 @@ class Model_Profile extends Model
             }
 
             if (empty($errors)) {
+                $sql = "SELECT * FROM user WHERE id = '{$_SESSION['id']}'";
+                $result = self::$connection -> query($sql);
+                mysqli_fetch_array($result);
                 $sql1 = "UPDATE user SET name = '$name', age = '$age', description = '$description' WHERE id = '$id'";
                 self::$connection->query($sql1);
-
-                $sql = "SELECT * FROM user WHERE id = '$id'";
-                $result = self::$connection->query($sql);
-                $record = mysqli_fetch_array($result);
-                $_SESSION['name'] = $record['name'];
-                $_SESSION['age'] = $record['age'];
-                $_SESSION['description'] = $record['description'];
                 echo 'Изменения сохранены!</a><br>';
             } else {
                 echo $errors[0];
             }
         }
+        return true;
     }
 
     public function add_file()
@@ -57,5 +66,6 @@ class Model_Profile extends Model
                 header("location: profile");
             }
         }
+        return true;
     }
 }

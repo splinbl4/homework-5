@@ -10,8 +10,9 @@ class Controller_Cabinet extends Controller
 
     public function action_index()
     {
-        $data = $this->model->get_data();
-        $data1 = $this->model->get_photo();
-        $this->view->generate('cabinet_view.php', $data, $data1);
+        $data2 = $this->model->get_data();
+        $data1 =$this->model->get_photo();
+        $data = $data1 + $data2;
+        $this->view->generate('cabinet_view.twig', array('data' => $data));
     }
 }

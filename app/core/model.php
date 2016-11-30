@@ -7,6 +7,8 @@ class Model
     function __construct()
     {
         require_once 'validation.php';
+        require_once '/vendor/autoload.php';
+        require_once 'mailer.php';
         self::connect_db();
     }
 

@@ -13,6 +13,16 @@ class Validation
         return true;
     }
 
+    public static function check_email($email)
+    {
+        if (isset($email)) {
+            if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                return true;
+            }
+        }
+        return true;
+    }
+
     public static function check_password($password)
     {
         if (isset($password)) {

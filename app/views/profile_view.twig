@@ -1,0 +1,14 @@
+<form action="" method="POST" enctype = "multipart/form-data">
+    <label>Имя:</label><br>
+    <input name="name" type="text" value="{{ data.name }}"><br>
+    <label>Возраст:</label><br>
+    <input name="age" type="number" value="{{ data.age }}"><br>
+    <label>О себе:</label><br>
+    <textarea name="description" cols="40" rows="3">{{ data.description }}</textarea><br><br>
+    <button name="submit" type="submit">Сохранить изменения</button><br><br>
+    <label>Загрузить фото:</label><br><br>
+    <input name="file" type="file">
+    <button name="submit3" type="submit">Загрузить</button><br><br>
+
+    <a href="cabinet">личный кабинет</a><br>
+</form>

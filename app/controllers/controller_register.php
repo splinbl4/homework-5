@@ -11,7 +11,8 @@ class Controller_Register extends Controller
 
     public function action_index()
     {
-        $this->model->get_data();
-        $this->view->generate('register_view.php');
+        $this->model->reg_user();
+        $data = $this->model->get_data();
+        $this->view->generate('register_view.twig', array('data' => $data));
     }
 }

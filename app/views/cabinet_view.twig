@@ -1,0 +1,10 @@
+<h3>Личные данные</h3>
+<p>Ваше имя: {{ data.name }}</p>
+<p>Ваш возраст: {{ data.age }}</p>
+<p>О себе: {{ data.description }}</p>
+<p>Список загруженных файлов: </p>
+    {% for row in data %}
+       <div>{{ row.filename }}</div>
+    {% endfor %}
+<p><a href="profile">Редактировать</a></p>
+<p>Перейти на <a href="/">Главную страницу</a></p>

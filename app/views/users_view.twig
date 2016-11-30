@@ -1,0 +1,8 @@
+<h3>Список пользователей:</h3>
+{% for row in data %}
+    <p>Имя: {{ row.name }}</p>
+    <p>Возраст: {{ row.age }}</p>
+    <p>Описание: {{ row.description }}</p>
+    <hr>
+{% endfor %}
+<a href="main">Назад</a><br>
