@@ -12,6 +12,8 @@
   "require": {
     "phpmailer/phpmailer": "v5.2.15",
     "google/recaptcha": "1.1.2",
-    "twig/twig": "1.6.5"
+    "twig/twig": "1.6.5",
+    "illuminate/database": "5.3.x-dev",
+    "intervention/image": "2.3.8"
   }
 }

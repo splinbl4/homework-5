@@ -1,17 +1,16 @@
 <?php
+use Intervention\Image\ImageManagerStatic as Image;
 session_start();
 class Model_Profile extends Model
 {
     public function get_data()
     {
         session_start();
-        if (isset($_SESSION['id'])) {
-            $arr = [ 'name' => $_POST['name'],
-            'age' => $_POST['age'],
-            'description' => $_POST['description']
-            ];
+        $id = $id = $_SESSION['id'];
+        if (isset($id)) {
+            $user = User::find($id);
         }
-       return $arr;
+       return $user;
     }
 
     public function add_data()
@@ -24,24 +23,25 @@ class Model_Profile extends Model
             $errors = [];
 
             if (Validation::check_name($name) == false) {
-                $errors[] = 'Введите имя!';
+                $errors[] = 'Имя должно быть не менее 5 символов';
             }
 
             if (Validation::check_age($age) == false) {
-                $errors[] = 'Введите возраст!';
+                $errors[] = 'Возраст может быть не меньше 10 и не больше 100';
             }
 
             if (Validation::check_description($description) == false) {
-                $errors[] = 'Пару слов о себе!';
+                $errors[] = 'Описание должно быть не менее 50 символов';
             }
 
             if (empty($errors)) {
-                $sql = "SELECT * FROM user WHERE id = '{$_SESSION['id']}'";
-                $result = self::$connection -> query($sql);
-                mysqli_fetch_array($result);
-                $sql1 = "UPDATE user SET name = '$name', age = '$age', description = '$description' WHERE id = '$id'";
-                self::$connection->query($sql1);
-                echo 'Изменения сохранены!</a><br>';
+                $user = User::find($id);
+                $user->name = $name;
+                $user->age = $age;
+                $user->description = $description;
+                $user->save();
+                echo 'Изменения сохранены!<br>';
+                //header("location: profile");
             } else {
                 echo $errors[0];
             }
@@ -55,15 +55,15 @@ class Model_Profile extends Model
             $file = $_FILES['file'];
             $uploaddir = 'photos/';
             $uploadfile = $uploaddir . basename($file['name']);
+            $id = $_SESSION['id'];
 
             if (Validation::check_file($file) == true) {
                 move_uploaded_file($file['tmp_name'], $uploadfile);
+                Image::make($uploadfile)->resize(480, 480)->save($uploadfile, 100);
                 $filename = $file['name'];
-                $id = $_SESSION['id'];
-                $sql = "INSERT INTO photos (filename, user_id) VALUES ('$filename', '$id')";
-                self::$connection -> query($sql);
-                echo 'Файл успешно добавлен';
-                header("location: profile");
+                Photo::insert(['filename' => $filename, 'user_id' => $id]);
+                header('location: profile');
+//                echo 'Файл успешно добавлен';
             }
         }
         return true;

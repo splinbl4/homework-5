@@ -11,8 +11,6 @@ class Model_Register extends Model
             'password2' => $_POST['password2']
         ];
         return $arr;
-
-
     }
 
     public function reg_user()
@@ -32,9 +30,7 @@ class Model_Register extends Model
                 $errors[] = 'Логин может состоять только из букв английского алфавита и цифр';
             }
 
-            if (Validation::check_email($email) == true) {
-                Mailer::send_mailer($login, $email);
-            } else {
+            if (Validation::check_email($login, $email) == false) {
                 $errors[] = 'Неправильный e-mail';
             }
 
@@ -53,28 +49,24 @@ class Model_Register extends Model
             $recaptcha = new \ReCaptcha\ReCaptcha('6Lc2Sw0UAAAAAMq4__LlE60nk1lnFZN8vFv7nMNx');
             $resp = $recaptcha->verify($gRecaptchaResponse, $remoteIp);
             if ($resp->isSuccess()) {
-                echo 'Вы не робот';
+
             } else {
-                $errors[] = 'Побробуйте еще раз';
+                $errors[] = 'Капча не пройдена';
             }
 
+            $records = User::where('login', $login)->first();
+            if ($login != $records->login) {
+                $ip = ip2long($remoteIp);
+                User::insert(['login' => $login, 'password' => $password, 'user_ip' => $ip]);
+            } else {
+                $errors[] = 'Такой логин уже существует';
+            }
 
             if (empty($errors)) {
-                $sql = "SELECT * FROM user WHERE login = '$login'";
-                $result = self::$connection->query($sql);
-                while ($records = mysqli_fetch_array($result)) {
-                    $arr[] = $records['login'];
-                }
-                $key = array_search($login, $arr);
-                if ($key !== 0) {
-                    $sql = "INSERT INTO user (login, password) VALUES('$login', '$password')";
-                    self::$connection->query($sql);
+                Mailer::send_mailer($login, $email);
                     echo 'Вы успешно зарегестрировались!<br>';
-                    echo 'Перейдите на Главную страницу и авторизуйтесь';
-                    header("location: register");
-                } else {
-                    echo $errors[] = 'Такой логин уже существует';
-                }
+                    echo "Перейдите на <a href='main'>Главную страницу</a> и авторизуйтесь";
+                    exit();
             } else {
                 echo $errors[0];
             }

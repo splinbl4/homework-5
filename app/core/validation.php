@@ -38,7 +38,7 @@ class Validation
     {
         if (isset($name)) {
             $name = htmlentities(strip_tags(trim($_POST['name'])), ENT_QUOTES);
-            if ($name == '') {
+            if (strlen($name) <= 9) {
                 return false;
             }
         }
@@ -49,7 +49,7 @@ class Validation
     {
         if (isset($age)) {
             $age = htmlentities(strip_tags(trim($_POST['age'])), ENT_QUOTES);
-            if ($age == '') {
+            if ($age < 10 or $age > 100) {
                 return false;
             }
         }
@@ -60,7 +60,7 @@ class Validation
     {
         if (isset($description)) {
             $description = htmlentities(strip_tags(trim($_POST['description'])), ENT_QUOTES);
-            if ($description == '') {
+            if (strlen($description) <= 100) {
                 return false;
             }
         }

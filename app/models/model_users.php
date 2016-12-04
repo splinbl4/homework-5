@@ -2,19 +2,16 @@
 session_start();
 class Model_Users extends Model
 {
-    public $type;
-    public $age;
     public function get_data()
     {
-        $sql = "SELECT name, age, description FROM user";
-        $result = self::$connection->query($sql);
-        while ($record = mysqli_fetch_assoc($result)) {
-            if ($record['age'] < 18) {
-                $record['age'] .= ' (Несовершеннолетний)';
+        $record = User::all();
+        foreach ($record as $user) {
+            if ($user['age'] < 18) {
+                $user['age'] .= ' (Несовершеннолетний)';
             } else {
-                $record['age'] .= ' (Совершеннолетний)';
+                $user['age'] .= ' (Совершеннолетний)';
             }
-            $arr[] = $record;
+            $arr[] = $user;
         }
         return $arr;
     }
